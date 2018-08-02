@@ -62,6 +62,9 @@ class Game extends React.Component {
         if (calculateWinner(squares)) {
             return;
         }
+        else if (checkDraw(squares)) {
+            return;
+        }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             history: history.concat([{squares: squares}]),
@@ -82,6 +85,7 @@ class Game extends React.Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
+        const draw = checkDraw(current.squares);
 
         const moves = history.map((step, move) => {
           const desc = move ?
@@ -95,6 +99,7 @@ class Game extends React.Component {
         });
         let status;
         if (winner) {status = `Winner: ${winner}`; }
+        else if (draw) { status = 'It is a draw'; }
         else { status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;}
 
         return (
@@ -132,6 +137,15 @@ function calculateWinner(squares) {
         }
     }
     return null;
+}
+
+function checkDraw(squares) {
+    for (let i = 0; i < squares.length; i++) {
+        if (squares[i] === null) {
+            return false;
+        }
+    }
+    return true;
 }
 
 ReactDOM.render(
